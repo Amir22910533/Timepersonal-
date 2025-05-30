@@ -1,93 +1,172 @@
-import { useState } from "react"; import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from "recharts";
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>🕰️ TimePersona - إدراك الزمن</title>
+  <style>
+    /* خطوط */
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
 
-export default function Home() { const [entries, setEntries] = useState([]); const [stage, setStage] = useState(""); const [duration, setDuration] = useState(""); const [emotion, setEmotion] = useState("");
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: #f5f7fa;
+      margin: 0;
+      padding: 0 20px;
+      color: #333;
+      line-height: 1.6;
+    }
 
-const parseDuration = (input) => { const num = parseFloat(input.replace(/[^\d.]/g, "")); return isNaN(num) ? 0 : num; };
+    header {
+      text-align: center;
+      padding: 40px 20px 30px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border-radius: 8px;
+      margin-bottom: 40px;
+      box-shadow: 0 8px 15px rgba(102, 126, 234, 0.3);
+    }
 
-const handleSubmit = (e) => { e.preventDefault(); const newEntry = { stage, duration: parseDuration(duration), emotion }; setEntries([...entries, newEntry]); setStage(""); setDuration(""); setEmotion(""); };
+    header h1 {
+      font-size: 2.8rem;
+      margin: 0;
+      letter-spacing: 3px;
+    }
 
-const colors = ["#60a5fa", "#3b82f6", "#2563eb", "#1d4ed8"];
+    header p {
+      margin-top: 8px;
+      font-size: 1.2rem;
+      font-weight: 300;
+      opacity: 0.85;
+    }
 
-return ( <main className="min-h-screen bg-gradient-to-b from-white to-blue-100 flex flex-col items-center justify-center p-4"> <h1 className="text-4xl md:text-6xl font-bold text-blue-800 mb-4 text-center"> TimePersona </h1> <p className="text-lg md:text-xl text-gray-700 max-w-2xl text-center mb-6"> أرسم خريطة زمنك النفسي واكتشف كيف تدرك مراحل حياتك… ليس كما هي في الواقع، بل كما تشعر بها. </p> <a
-href="#start"
-className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-2xl shadow-md transition text-lg"
-> ابدأ الآن </a>
+    main {
+      max-width: 800px;
+      margin: 0 auto 60px;
+      background: white;
+      padding: 30px 40px;
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
 
-<section id="start" className="mt-16 w-full max-w-2xl bg-white rounded-2xl p-6 shadow-lg">
-    <h2 className="text-2xl font-semibold text-blue-700 mb-4 text-center">
-      محطة زمنية من حياتك
-    </h2>
-    <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-      <input
-        type="text"
-        placeholder="مثال: تخرجي من الجامعة"
-        className="border border-gray-300 rounded-xl p-3"
-        value={stage}
-        onChange={(e) => setStage(e.target.value)}
-        required
-      />
-      <input
-        type="text"
-        placeholder="كم شعرت أن هذه المرحلة استغرقت من عمرك؟"
-        className="border border-gray-300 rounded-xl p-3"
-        value={duration}
-        onChange={(e) => setDuration(e.target.value)}
-        required
-      />
-      <textarea
-        placeholder="صف مشاعرك خلال هذه المرحلة..."
-        className="border border-gray-300 rounded-xl p-3 h-28"
-        value={emotion}
-        onChange={(e) => setEmotion(e.target.value)}
-        required
-      />
-      <button
-        type="submit"
-        className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-xl"
-      >
-        أضف إلى خريطتي
-      </button>
-    </form>
+    section {
+      margin-bottom: 40px;
+    }
+
+    h2 {
+      font-size: 1.8rem;
+      border-bottom: 3px solid #764ba2;
+      padding-bottom: 8px;
+      margin-bottom: 20px;
+      color: #5a3e85;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    ul li {
+      position: relative;
+      padding-right: 30px;
+      margin-bottom: 15px;
+      font-size: 1.15rem;
+    }
+
+    ul li::before {
+      content: '✔';
+      position: absolute;
+      right: 0;
+      color: #667eea;
+      font-weight: bold;
+      font-size: 1.2rem;
+      line-height: 1;
+      top: 2px;
+    }
+
+    a {
+      color: #667eea;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .contact-info p {
+      font-size: 1.1rem;
+      margin: 10px 0;
+    }
+
+    .contact-info a {
+      display: inline-block;
+      margin-right: 10px;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.9rem;
+      color: #999;
+      padding-bottom: 20px;
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      main {
+        padding: 20px;
+        margin: 0 10px 40px;
+      }
+
+      header h1 {
+        font-size: 2rem;
+      }
+
+      h2 {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>🕰️ TimePersona</h1>
+  <p>مشروع ويب تفاعلي لاستكشاف إدراك الإنسان للزمن عبر مراحل حياته المختلفة</p>
+</header>
+
+<main>
+  <section>
+    <h2>📌 ما هو TimePersona؟</h2>
+    <p>هو خريطة زمنية شخصية تتبع تطور إدراك الزمن من الطفولة إلى الشيخوخة، باستخدام الرسم البياني والمفاهيم الفلسفية.</p>
   </section>
 
-  {entries.length > 0 && (
-    <section className="mt-12 w-full max-w-2xl">
-      <h3 className="text-xl font-semibold text-gray-800 mb-4 text-center">
-        خريطتك الزمنية النفسية
-      </h3>
-      <ul className="space-y-4 mb-8">
-        {entries.map((entry, index) => (
-          <li
-            key={index}
-            className="bg-white p-4 rounded-xl shadow border-l-4 border-blue-400"
-          >
-            <p className="font-bold text-blue-800">{entry.stage}</p>
-            <p className="text-sm text-gray-600">الزمن النفسي: {entry.duration}</p>
-            <p className="text-sm text-gray-700 mt-1">{entry.emotion}</p>
-          </li>
-        ))}
-      </ul>
-      <div className="w-full h-64 bg-white p-4 rounded-xl shadow">
-        <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={entries} layout="vertical" margin={{ left: 40, right: 20 }}>
-            <XAxis type="number" hide />
-            <YAxis dataKey="stage" type="category" width={100} />
-            <Tooltip />
-            <Bar dataKey="duration" fill="#60a5fa">
-              {entries.map((_, index) => (
-                <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
-              ))}
-            </Bar>
-          </BarChart>
-        </ResponsiveContainer>
-      </div>
-    </section>
-  )}
+  <section>
+    <h2>💡 المميزات:</h2>
+    <ul>
+      <li>تصميم باللغة العربية الفصحى</li>
+      <li>رسم بياني تفاعلي لتمثيل إدراك الزمن</li>
+      <li>واجهة بسيطة وسريعة التحميل</li>
+      <li>إمكانية تطوير المشروع كمخطط معرفي زمني لكل شخص</li>
+    </ul>
+  </section>
 
-  <footer className="mt-16 text-center text-sm text-gray-500">
-    &copy; 2025 TimePersona. صممه أمير الصحبي
-  </footer>
+  <section>
+    <h2>🚀 الموقع الإلكتروني:</h2>
+    <p>سيتم نشره قريبًا على <a href="https://time-decoded.netlify.app" target="_blank" rel="noopener noreferrer">Netlify</a></p>
+  </section>
+
+  <section class="contact-info">
+    <h2>📫 تواصل:</h2>
+    <p>📧 البريد الإلكتروني: <a href="mailto:arsinamirlopin@gmail.com">arsinamirlopin@gmail.com</a></p>
+    <p>📱 الهاتف: <a href="tel:+21629803918">+21629803918</a></p>
+    <p>💬 فيسبوك: <a href="https://www.facebook.com/amir.essahbi" target="_blank" rel="noopener noreferrer">amir essahbi</a></p>
+  </section>
 </main>
 
-); }
+<footer>
+  &copy; 2025 TimePersona - جميع الحقوق محفوظة
+</footer>
 
+</body>
+</html>
