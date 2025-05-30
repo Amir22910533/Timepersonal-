@@ -1,0 +1,93 @@
+import { useState } from "react"; import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from "recharts";
+
+export default function Home() { const [entries, setEntries] = useState([]); const [stage, setStage] = useState(""); const [duration, setDuration] = useState(""); const [emotion, setEmotion] = useState("");
+
+const parseDuration = (input) => { const num = parseFloat(input.replace(/[^\d.]/g, "")); return isNaN(num) ? 0 : num; };
+
+const handleSubmit = (e) => { e.preventDefault(); const newEntry = { stage, duration: parseDuration(duration), emotion }; setEntries([...entries, newEntry]); setStage(""); setDuration(""); setEmotion(""); };
+
+const colors = ["#60a5fa", "#3b82f6", "#2563eb", "#1d4ed8"];
+
+return ( <main className="min-h-screen bg-gradient-to-b from-white to-blue-100 flex flex-col items-center justify-center p-4"> <h1 className="text-4xl md:text-6xl font-bold text-blue-800 mb-4 text-center"> TimePersona </h1> <p className="text-lg md:text-xl text-gray-700 max-w-2xl text-center mb-6"> أرسم خريطة زمنك النفسي واكتشف كيف تدرك مراحل حياتك… ليس كما هي في الواقع، بل كما تشعر بها. </p> <a
+href="#start"
+className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-2xl shadow-md transition text-lg"
+> ابدأ الآن </a>
+
+<section id="start" className="mt-16 w-full max-w-2xl bg-white rounded-2xl p-6 shadow-lg">
+    <h2 className="text-2xl font-semibold text-blue-700 mb-4 text-center">
+      محطة زمنية من حياتك
+    </h2>
+    <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+      <input
+        type="text"
+        placeholder="مثال: تخرجي من الجامعة"
+        className="border border-gray-300 rounded-xl p-3"
+        value={stage}
+        onChange={(e) => setStage(e.target.value)}
+        required
+      />
+      <input
+        type="text"
+        placeholder="كم شعرت أن هذه المرحلة استغرقت من عمرك؟"
+        className="border border-gray-300 rounded-xl p-3"
+        value={duration}
+        onChange={(e) => setDuration(e.target.value)}
+        required
+      />
+      <textarea
+        placeholder="صف مشاعرك خلال هذه المرحلة..."
+        className="border border-gray-300 rounded-xl p-3 h-28"
+        value={emotion}
+        onChange={(e) => setEmotion(e.target.value)}
+        required
+      />
+      <button
+        type="submit"
+        className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-xl"
+      >
+        أضف إلى خريطتي
+      </button>
+    </form>
+  </section>
+
+  {entries.length > 0 && (
+    <section className="mt-12 w-full max-w-2xl">
+      <h3 className="text-xl font-semibold text-gray-800 mb-4 text-center">
+        خريطتك الزمنية النفسية
+      </h3>
+      <ul className="space-y-4 mb-8">
+        {entries.map((entry, index) => (
+          <li
+            key={index}
+            className="bg-white p-4 rounded-xl shadow border-l-4 border-blue-400"
+          >
+            <p className="font-bold text-blue-800">{entry.stage}</p>
+            <p className="text-sm text-gray-600">الزمن النفسي: {entry.duration}</p>
+            <p className="text-sm text-gray-700 mt-1">{entry.emotion}</p>
+          </li>
+        ))}
+      </ul>
+      <div className="w-full h-64 bg-white p-4 rounded-xl shadow">
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart data={entries} layout="vertical" margin={{ left: 40, right: 20 }}>
+            <XAxis type="number" hide />
+            <YAxis dataKey="stage" type="category" width={100} />
+            <Tooltip />
+            <Bar dataKey="duration" fill="#60a5fa">
+              {entries.map((_, index) => (
+                <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
+              ))}
+            </Bar>
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+    </section>
+  )}
+
+  <footer className="mt-16 text-center text-sm text-gray-500">
+    &copy; 2025 TimePersona. صممه أمير الصحبي
+  </footer>
+</main>
+
+); }
+
