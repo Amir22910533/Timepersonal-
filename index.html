@@ -1,172 +1,55 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>🕰️ TimePersona - إدراك الزمن</title>
-  <style>
-    /* خطوط */
-    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
+import React, { useState } from 'react';
+import { Card, CardContent } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 
-    body {
-      font-family: 'Cairo', sans-serif;
-      background: #f5f7fa;
-      margin: 0;
-      padding: 0 20px;
-      color: #333;
-      line-height: 1.6;
+export default function TimeInputForm() {
+  const [entries, setEntries] = useState([]);
+  const [age, setAge] = useState('');
+  const [feeling, setFeeling] = useState('');
+
+  const addEntry = () => {
+    if (age && feeling) {
+      setEntries([...entries, { age, feeling }]);
+      setAge('');
+      setFeeling('');
     }
+  };
 
-    header {
-      text-align: center;
-      padding: 40px 20px 30px;
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      color: white;
-      border-radius: 8px;
-      margin-bottom: 40px;
-      box-shadow: 0 8px 15px rgba(102, 126, 234, 0.3);
-    }
+  return (
+    <div className="max-w-xl mx-auto p-4 space-y-4">
+      <h1 className="text-2xl font-bold text-center">🧠 خريطتك الزمنية النفسية</h1>
 
-    header h1 {
-      font-size: 2.8rem;
-      margin: 0;
-      letter-spacing: 3px;
-    }
+      <Card>
+        <CardContent className="space-y-2">
+          <label className="block text-right">العمر:</label>
+          <Input
+            type="number"
+            value={age}
+            onChange={(e) => setAge(e.target.value)}
+            placeholder="مثلاً: 25"
+          />
+          <label className="block text-right">كيف شعرت بالزمن في هذا العمر؟</label>
+          <Input
+            type="text"
+            value={feeling}
+            onChange={(e) => setFeeling(e.target.value)}
+            placeholder="مثلاً: سريع جدًا، مليء بالقلق، ممتع..."
+          />
+          <Button onClick={addEntry}>➕ أضف إلى الخريطة</Button>
+        </CardContent>
+      </Card>
 
-    header p {
-      margin-top: 8px;
-      font-size: 1.2rem;
-      font-weight: 300;
-      opacity: 0.85;
-    }
-
-    main {
-      max-width: 800px;
-      margin: 0 auto 60px;
-      background: white;
-      padding: 30px 40px;
-      border-radius: 10px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-    }
-
-    section {
-      margin-bottom: 40px;
-    }
-
-    h2 {
-      font-size: 1.8rem;
-      border-bottom: 3px solid #764ba2;
-      padding-bottom: 8px;
-      margin-bottom: 20px;
-      color: #5a3e85;
-    }
-
-    ul {
-      list-style: none;
-      padding: 0;
-    }
-
-    ul li {
-      position: relative;
-      padding-right: 30px;
-      margin-bottom: 15px;
-      font-size: 1.15rem;
-    }
-
-    ul li::before {
-      content: '✔';
-      position: absolute;
-      right: 0;
-      color: #667eea;
-      font-weight: bold;
-      font-size: 1.2rem;
-      line-height: 1;
-      top: 2px;
-    }
-
-    a {
-      color: #667eea;
-      text-decoration: none;
-      font-weight: 600;
-    }
-
-    a:hover {
-      text-decoration: underline;
-    }
-
-    .contact-info p {
-      font-size: 1.1rem;
-      margin: 10px 0;
-    }
-
-    .contact-info a {
-      display: inline-block;
-      margin-right: 10px;
-    }
-
-    footer {
-      text-align: center;
-      font-size: 0.9rem;
-      color: #999;
-      padding-bottom: 20px;
-    }
-
-    /* Responsive */
-    @media (max-width: 600px) {
-      main {
-        padding: 20px;
-        margin: 0 10px 40px;
-      }
-
-      header h1 {
-        font-size: 2rem;
-      }
-
-      h2 {
-        font-size: 1.5rem;
-      }
-    }
-  </style>
-</head>
-<body>
-
-<header>
-  <h1>🕰️ TimePersona</h1>
-  <p>مشروع ويب تفاعلي لاستكشاف إدراك الإنسان للزمن عبر مراحل حياته المختلفة</p>
-</header>
-
-<main>
-  <section>
-    <h2>📌 ما هو TimePersona؟</h2>
-    <p>هو خريطة زمنية شخصية تتبع تطور إدراك الزمن من الطفولة إلى الشيخوخة، باستخدام الرسم البياني والمفاهيم الفلسفية.</p>
-  </section>
-
-  <section>
-    <h2>💡 المميزات:</h2>
-    <ul>
-      <li>تصميم باللغة العربية الفصحى</li>
-      <li>رسم بياني تفاعلي لتمثيل إدراك الزمن</li>
-      <li>واجهة بسيطة وسريعة التحميل</li>
-      <li>إمكانية تطوير المشروع كمخطط معرفي زمني لكل شخص</li>
-    </ul>
-  </section>
-
-  <section>
-    <h2>🚀 الموقع الإلكتروني:</h2>
-    <p>سيتم نشره قريبًا على <a href="https://time-decoded.netlify.app" target="_blank" rel="noopener noreferrer">Netlify</a></p>
-  </section>
-
-  <section class="contact-info">
-    <h2>📫 تواصل:</h2>
-    <p>📧 البريد الإلكتروني: <a href="mailto:arsinamirlopin@gmail.com">arsinamirlopin@gmail.com</a></p>
-    <p>📱 الهاتف: <a href="tel:+21629803918">+21629803918</a></p>
-    <p>💬 فيسبوك: <a href="https://www.facebook.com/amir.essahbi" target="_blank" rel="noopener noreferrer">amir essahbi</a></p>
-  </section>
-</main>
-
-<footer>
-  &copy; 2025 TimePersona - جميع الحقوق محفوظة
-</footer>
-
-</body>
-</html>
+      <div className="space-y-2">
+        {entries.map((entry, idx) => (
+          <Card key={idx} className="bg-gray-100">
+            <CardContent className="flex justify-between">
+              <span>العمر: {entry.age}</span>
+              <span>الإحساس: {entry.feeling}</span>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    </div>
+  );
+}
