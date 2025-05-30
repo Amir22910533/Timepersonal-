@@ -1,10 +1,104 @@
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom"; import { useState } from "react"; import { motion } from "framer-motion"; import './index.css';
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { useState } from "react";
+import { motion } from "framer-motion";
+import './index.css';
 
-function Home() { return ( <main className="p-8 text-center"> <h1 className="text-4xl font-bold mb-4">🕰️ الزمن الشخصي</h1> <p className="text-lg mb-6">اكتشف إدراكك النفسي للزمن عبر خريطة تفاعلية شخصية.</p> <Link to="/create" className="bg-blue-600 text-white px-6 py-2 rounded-xl shadow hover:bg-blue-700">ابدأ الآن</Link> </main> ); }
+function Home() {
+  return (
+    <main className="p-8 text-center">
+      <h1 className="text-4xl font-bold mb-4">🕰️ الزمن الشخصي</h1>
+      <p className="text-lg mb-6">اكتشف إدراكك النفسي للزمن عبر خريطة تفاعلية شخصية.</p>
+      <Link to="/create" className="bg-blue-600 text-white px-6 py-2 rounded-xl shadow hover:bg-blue-700">ابدأ الآن</Link>
+    </main>
+  );
+}
 
-function CreateMap({ onAddEvent }) { const [year, setYear] = useState(2020); const [age, setAge] = useState(25); const [event, setEvent] = useState(""); const [feeling, setFeeling] = useState("عادي");
+function CreateMap({ onAddEvent }) {
+  const [year, setYear] = useState(2020);
+  const [age, setAge] = useState(25);
+  const [event, setEvent] = useState("");
+  const [feeling, setFeeling] = useState("عادي");
 
-const handleSubmit = (e) => { e.preventDefault(); onAddEvent({ year, age, event, feeling }); setEvent(""); };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onAddEvent({ year, age, event, feeling });
+    setEvent("");
+  };
 
-return ( <section className="p-6 max-w-xl mx-auto"> <h2 className="text-2xl font-bold mb-4">🛠️ أنشئ خريطتك الزمنية</h2> <form onSubmit={handleSubmit} className="space-y-4"> <input type="number" placeholder="السنة" value={year} onChange={e => setYear(+e.target.value)} className="w-full p-2 border rounded" /> <input type="number" placeholder="العمر" value={age} onChange={e => setAge(+
+  return (
+    <section className="p-6 max-w-xl mx-auto">
+      <h2 className="text-2xl font-bold mb-4">🛠️ أنشئ خريطتك الزمنية</h2>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <input type="number" placeholder="السنة" value={year} onChange={e => setYear(+e.target.value)} className="w-full p-2 border rounded" />
+        <input type="number" placeholder="العمر" value={age} onChange={e => setAge(+e.target.value)} className="w-full p-2 border rounded" />
+        <input type="text" placeholder="الحدث" value={event} onChange={e => setEvent(e.target.value)} className="w-full p-2 border rounded" />
+        <select value={feeling} onChange={e => setFeeling(e.target.value)} className="w-full p-2 border rounded">
+          <option>سريع</option>
+          <option>بطيء</option>
+          <option>عادي</option>
+        </select>
+        <button type="submit" className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">أضف إلى الخريطة</button>
+      </form>
+      <Link to="/map" className="inline-block mt-6 text-blue-600 underline">عرض الخريطة</Link>
+    </section>
+  );
+}
 
+function TimelineMap({ data }) {
+  return (
+    <section className="p-6 max-w-3xl mx-auto">
+      <h2 className="text-2xl font-bold mb-6">🧭 خريطتك الزمنية</h2>
+      <div className="space-y-4">
+        {data.map((item, idx) => (
+          <motion.div key={idx} className="p-4 bg-white rounded-xl shadow flex justify-between items-center"
+            initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: idx * 0.1 }}>
+            <div>
+              <h3 className="font-bold">{item.event}</h3>
+              <p className="text-sm text-gray-600">{item.year} | عمر: {item.age}</p>
+            </div>
+            <span className="text-sm px-2 py-1 rounded-full bg-gray-100">{item.feeling}</span>
+          </motion.div>
+        ))}
+      </div>
+      <Link to="/analysis" className="inline-block mt-6 text-blue-600 underline">تحليل الخريطة</Link>
+    </section>
+  );
+}
+
+function Analysis({ data }) {
+  const feelings = data.map(d => d.feeling);
+  const fast = feelings.filter(f => f === "سريع").length;
+  const slow = feelings.filter(f => f === "بطيء").length;
+
+  return (
+    <section className="p-6 max-w-2xl mx-auto">
+      <h2 className="text-2xl font-bold mb-4">📊 تحليلك النفسي الزمني</h2>
+      <p>لقد شعرت أن {fast} من أحداثك مرت بسرعة، و{slow} منها كانت بطيئة. هذا يعكس إدراكك العاطفي والفلسفي للزمن.</p>
+      <Link to="/" className="inline-block mt-6 text-blue-600 underline">العودة للرئيسية</Link>
+    </section>
+  );
+}
+
+export default function App() {
+  const [events, setEvents] = useState([]);
+
+  return (
+    <Router>
+      <nav className="bg-gray-800 text-white p-4 flex justify-between">
+        <span className="font-bold">TimePersona</span>
+        <div className="space-x-4">
+          <Link to="/">الرئيسية</Link>
+          <Link to="/create">إنشاء</Link>
+          <Link to="/map">الخريطة</Link>
+        </div>
+      </nav>
+
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/create" element={<CreateMap onAddEvent={(e) => setEvents([...events, e])} />} />
+        <Route path="/map" element={<TimelineMap data={events} />} />
+        <Route path="/analysis" element={<Analysis data={events} />} />
+      </Routes>
+    </Router>
+  );
+}
