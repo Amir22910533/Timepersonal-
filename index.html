@@ -1,55 +1,10 @@
-import React, { useState } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom"; import { useState } from "react"; import { motion } from "framer-motion"; import './index.css';
 
-export default function TimeInputForm() {
-  const [entries, setEntries] = useState([]);
-  const [age, setAge] = useState('');
-  const [feeling, setFeeling] = useState('');
+function Home() { return ( <main className="p-8 text-center"> <h1 className="text-4xl font-bold mb-4">🕰️ الزمن الشخصي</h1> <p className="text-lg mb-6">اكتشف إدراكك النفسي للزمن عبر خريطة تفاعلية شخصية.</p> <Link to="/create" className="bg-blue-600 text-white px-6 py-2 rounded-xl shadow hover:bg-blue-700">ابدأ الآن</Link> </main> ); }
 
-  const addEntry = () => {
-    if (age && feeling) {
-      setEntries([...entries, { age, feeling }]);
-      setAge('');
-      setFeeling('');
-    }
-  };
+function CreateMap({ onAddEvent }) { const [year, setYear] = useState(2020); const [age, setAge] = useState(25); const [event, setEvent] = useState(""); const [feeling, setFeeling] = useState("عادي");
 
-  return (
-    <div className="max-w-xl mx-auto p-4 space-y-4">
-      <h1 className="text-2xl font-bold text-center">🧠 خريطتك الزمنية النفسية</h1>
+const handleSubmit = (e) => { e.preventDefault(); onAddEvent({ year, age, event, feeling }); setEvent(""); };
 
-      <Card>
-        <CardContent className="space-y-2">
-          <label className="block text-right">العمر:</label>
-          <Input
-            type="number"
-            value={age}
-            onChange={(e) => setAge(e.target.value)}
-            placeholder="مثلاً: 25"
-          />
-          <label className="block text-right">كيف شعرت بالزمن في هذا العمر؟</label>
-          <Input
-            type="text"
-            value={feeling}
-            onChange={(e) => setFeeling(e.target.value)}
-            placeholder="مثلاً: سريع جدًا، مليء بالقلق، ممتع..."
-          />
-          <Button onClick={addEntry}>➕ أضف إلى الخريطة</Button>
-        </CardContent>
-      </Card>
+return ( <section className="p-6 max-w-xl mx-auto"> <h2 className="text-2xl font-bold mb-4">🛠️ أنشئ خريطتك الزمنية</h2> <form onSubmit={handleSubmit} className="space-y-4"> <input type="number" placeholder="السنة" value={year} onChange={e => setYear(+e.target.value)} className="w-full p-2 border rounded" /> <input type="number" placeholder="العمر" value={age} onChange={e => setAge(+
 
-      <div className="space-y-2">
-        {entries.map((entry, idx) => (
-          <Card key={idx} className="bg-gray-100">
-            <CardContent className="flex justify-between">
-              <span>العمر: {entry.age}</span>
-              <span>الإحساس: {entry.feeling}</span>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-    </div>
-  );
-}
